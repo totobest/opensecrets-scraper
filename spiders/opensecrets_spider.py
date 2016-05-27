@@ -27,8 +27,8 @@ class OpenSecretsSpider(scrapy.Spider):
 
     def parse(self, response):
         for title, definition in grouper(response.css('#rightColumn > *'), 2):
-            title = title.css('::text').extract()
-            words = definition.css('::text').extract()
+            title = title.css('::text').extract()[0]
+            words = definition.css('::text').extract()[0]
 
             yield {
                 'abstract': smart_truncate(words, 50),
