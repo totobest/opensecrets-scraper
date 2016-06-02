@@ -33,6 +33,7 @@ class OpenSecretsSpider(scrapy.Spider):
 
     def parse(self, response):
         for title, definition in grouper(response.css('#rightColumn > *'), 2):
+            url = response.urljoin(title.css('::attr(href)').extract()[0])
             title = title.css('::text').extract()[0]
             words = definition.css('::text').extract()[0]
 
@@ -41,7 +42,7 @@ class OpenSecretsSpider(scrapy.Spider):
                 'external_id': "opensecrets_{}".format(slugify(title, to_lower=True)),
                 'date': datetime.datetime.today(),
                 'title': title,
-                'url': response.url,
+                'url': url,
                 'words': words,
                 'meta': {
                     'opensecrets': {

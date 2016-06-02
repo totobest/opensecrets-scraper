@@ -11,8 +11,8 @@ class MyJSONEncoder(ScrapyJSONEncoder):
 
     def default(self, o):
         if isinstance(o, datetime.datetime):
-            utc_dt = self.__utc_tz.localize(o).replace(microsecond=0)
-            return utc_dt.isoformat()
+            utc_dt = self.__utc_tz.localize(o)
+            return utc_dt.strftime("%Y-%m-%dT%H:%M") + "+00:00"
         else:
             return super(MyJSONEncoder, self).default(o)
 
