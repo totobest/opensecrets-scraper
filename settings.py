@@ -3,8 +3,8 @@
 SPIDER_MODULES = ['spiders']
 
 FEED_EXPORTERS_BASE = {
-    'my_json': 'exporters.MyJsonItemExporter'
+    'json': 'exporters.MyJsonItemExporter'
 }
 
-FEED_FORMAT = "my_json"
+FEED_FORMAT = "json"
 FEED_URI = "export.json"
