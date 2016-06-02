@@ -1,4 +1,4 @@
-# Scraper 
+# opensecrets Scraper 
 
 ## Installation
 
@@ -11,7 +11,7 @@ pip install -U -r requirements.txt
 
 ## How to use
 
-```
+```shell
 scrapy crawl opensecrets -o results.json
 ```
 
