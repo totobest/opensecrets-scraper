@@ -1,3 +1,4 @@
+from pytz import timezone
 import datetime
 
 from scrapy.exporters import JsonItemExporter
@@ -6,9 +7,12 @@ from scrapy.utils.serialize import ScrapyJSONEncoder
 
 class MyJSONEncoder(ScrapyJSONEncoder):
 
+    __utc_tz = timezone("UTC")
+
     def default(self, o):
         if isinstance(o, datetime.datetime):
-            return o.isoformat()
+            utc_dt = self.__utc_tz.localize(o).replace(microsecond=0)
+            return utc_dt.isoformat()
         else:
             return super(MyJSONEncoder, self).default(o)
 
