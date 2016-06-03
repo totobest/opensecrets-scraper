@@ -9,6 +9,9 @@ class MyJSONEncoder(ScrapyJSONEncoder):
 
     __utc_tz = timezone("UTC")
 
+    def __init__(self):
+        super(MyJSONEncoder, self).__init__(indent=4, sort_keys=True)
+
     def default(self, o):
         if isinstance(o, datetime.datetime):
             utc_dt = self.__utc_tz.localize(o)
