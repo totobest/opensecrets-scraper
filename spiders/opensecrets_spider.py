@@ -48,22 +48,22 @@ class OpenSecretsSpider(scrapy.Spider):
         ]
 
         title_extractor_list = itertools.imap(
-            lambda selector: "".join(response.css(selector).extract()).strip(),
+            lambda selector: " ".join(response.css(selector).extract()).strip(),
             title_selector_list
         )
         title = next(candidate_title for candidate_title in title_extractor_list if candidate_title)
 
         text_selector_list = [
             '#landingIntro p::text',
-            '#rightColumn::text',
-            '#rightColumn *::text'
+            '#rightColumn h2::text,#rightColumn h3::text,#rightColumn a::text,'
+            '#rightColumn div::text,#rightColumn p::text,#rightColumn span::text'
         ]
 
         text_extractor_list = itertools.imap(
-            lambda selector: "".join(response.css(selector).extract()).strip(),
+            lambda selector: " ".join(response.css(selector).extract()).strip(),
             text_selector_list
         )
-        text = next(candidate_text for candidate_text in text_extractor_list if candidate_text)
+        text = " ".join(candidate_text for candidate_text in text_extractor_list if candidate_text).strip()
 
         url = response.url
 
