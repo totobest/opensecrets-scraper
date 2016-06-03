@@ -1,7 +1,7 @@
 from pytz import timezone
 import datetime
 
-from scrapy.exporters import JsonItemExporter
+from scrapy.exporters import JsonLinesItemExporter
 from scrapy.utils.serialize import ScrapyJSONEncoder
 
 
@@ -17,7 +17,7 @@ class MyJSONEncoder(ScrapyJSONEncoder):
             return super(MyJSONEncoder, self).default(o)
 
 
-class MyJsonItemExporter(JsonItemExporter):
+class MyJsonItemExporter(JsonLinesItemExporter):
 
     def __init__(self, file, **kwargs):
         super(MyJsonItemExporter, self).__init__(file, **kwargs)
