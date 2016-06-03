@@ -1,12 +1,14 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
+import collections
 import datetime
 import itertools
 from itertools import izip_longest
 
 import re
 import scrapy
+from scrapy.utils.response import open_in_browser
 from slugify import slugify
 
 
@@ -29,24 +31,58 @@ def smart_truncate(content, length=50, suffix='...'):
 
 class OpenSecretsSpider(scrapy.Spider):
     name = 'opensecrets'
-    start_urls = ['https://www.opensecrets.org/elections/']
+    start_urls = ['https://www.opensecrets.org/']
 
     def parse(self, response):
-        for title, definition in grouper(response.css('#rightColumn > *'), 2):
-            url = response.urljoin(title.css('::attr(href)').extract()[0])
-            title = title.css('::text').extract()[0]
-            words = definition.css('::text').extract()[0]
 
-            yield {
-                'abstract': smart_truncate(words, 50),
+        for category in response.css('#nav a::attr(href)'):
+            full_url = response.urljoin(category.extract())
+            yield scrapy.Request(full_url, callback=self.parse_page)
+
+    def parse_page(self, response):
+
+        title_selector_list = [
+            '#landingIntro h1::text',
+            '#pageHeading::text',
+            '#rightColumn h1::text'
+        ]
+
+        title_extractor_list = itertools.imap(
+            lambda selector: "".join(response.css(selector).extract()).strip(),
+            title_selector_list
+        )
+        title = next(candidate_title for candidate_title in title_extractor_list if candidate_title)
+
+        text_selector_list = [
+            '#landingIntro p::text',
+            '#rightColumn::text',
+            '#rightColumn *::text'
+        ]
+
+        text_extractor_list = itertools.imap(
+            lambda selector: "".join(response.css(selector).extract()).strip(),
+            text_selector_list
+        )
+        text = next(candidate_text for candidate_text in text_extractor_list if candidate_text)
+
+        url = response.url
+
+        data = {
+                'abstract': smart_truncate(text, 50),
                 'external_id': "opensecrets_{}".format(slugify(title, to_lower=True)),
                 'date': datetime.datetime.today(),
                 'title': title,
                 'url': url,
-                'words': words,
+                'words': text,
                 'meta': {
                     'opensecrets': {
 
                     }
                 }
             }
+        yield data
+
+        for section in response.css('#leftNavList a::attr(href)'):
+            full_url = response.urljoin(section.extract())
+            if not full_url.startswith("javascript:"):
+                yield scrapy.Request(full_url, callback=self.parse_page)
