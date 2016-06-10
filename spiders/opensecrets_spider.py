@@ -1,14 +1,11 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
-import collections
 import datetime
 import itertools
 from itertools import izip_longest
-
 import re
 import scrapy
-from scrapy.utils.response import open_in_browser
 from slugify import slugify
 
 
