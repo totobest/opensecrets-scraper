@@ -13,7 +13,8 @@ ITEM_PIPELINES = {
 }
 
 
-OUTPUT_URI = "s3://mybucket/output/"
+OUTPUT_URI = "output/"
+# OUTPUT_URI = "s3://mybucket/output/"
 
 # You can store your AWS credentials here. Uncomment the following:
 # AWS_ACCESS_KEY_ID = ""
