@@ -21,6 +21,21 @@ scrapy crawl opensecrets -s OUTPUT_URI="output/"
 scrapy crawl opensecrets -s OUTPUT_URI="s3://bucket/output/" -s AWS_ACCESS_KEY_ID="YOURACCESSKEY" -s AWS_SECRET_ACCESS_KEY="YOURSECRETKEY"
 ```
 
+### Concroling the number of processes
+
+You can use the command-line argument `-s CONCURRENT_REQUESTS=x` to set the number of processes to use:
+
+```shell
+scrapy crawl opensecrets -s OUTPUT_URI="output/" -s CONCURRENT_REQUESTS=8
+```
+
+or with AWS S3 as a storage:
+
+```shell
+scrapy crawl opensecrets -s OUTPUT_URI="s3://bucket/output/" -s AWS_ACCESS_KEY_ID="YOURACCESSKEY" -s AWS_SECRET_ACCESS_KEY="YOURSECRETKEY" -s CONCURRENT_REQUESTS=8
+```
+
+
 ## Alternatives ways to configure AWS credentials
 
 You have a few options for providing the AWS credentials:
