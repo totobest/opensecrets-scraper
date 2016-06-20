@@ -41,3 +41,11 @@ CONCURRENT_REQUESTS_PER_DOMAIN = CONCURRENT_REQUESTS
 # Default: 100
 
 CONCURRENT_ITEMS = CONCURRENT_REQUESTS
+
+
+# The amount of time (in secs) that the downloader should wait before downloading
+# consecutive pages from the same website.
+# This can be used to throttle the crawling speed to avoid hitting servers too hard.
+# Decimal numbers are supported.
+
+DOWNLOAD_DELAY = 0.25    # 250 ms of delay
